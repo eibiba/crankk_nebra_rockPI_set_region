@@ -4,9 +4,11 @@
 #
 # author: pedro.marques@eibiba.com
 #
-# At this date (2023-05-02), Nebra RockPI Indoor gateways may have trouble to assert it's location. This issue makes the packet forwarder to restart constantly, not allowing the gateway to work properly on Cra# This script sets the region on the gateway configuration, allowing the packet forwarder to work properly.
+# version 1.0.1
 #
-# Right now, only EU868 and US915 regions are supported. If the issue persists and new regions became available, they will be added.
+# At this date (2023-05-08), Nebra RockPI Indoor gateways may have trouble to assert it's location. This issue makes the packet forwarder to restart constantly, not allowing the gateway to work properly on Cra# This script sets the region on the gateway configuration, allowing the packet forwarder to work properly.
+#
+# Right now, only EU868, US915 and AU915_SB1 regions are supported. If the issue persists and new regions became available, they will be added.
 #
 # Usage: ./crankk_nebra_rockPI_set_region.sh
 #
@@ -20,9 +22,17 @@ if [ -z $containerID ]; then
 else
    freq=
    labelselect="Select the frequency band: "
-   select opt in EU868 US915; do                                                                                                                                                                                    case $opt in                                                                                                                                                                                                        EU868)
-         freq=$opt                                                                                                                                                                                                        break                                                                                                                                                                                                            ;;
+   select opt in EU868 US915 AU915_SB1; do
+   case $opt in
+      EU868)
+         freq=$opt
+         break
+         ;;
       US915)
+         freq=$opt
+         break
+         ;;
+      AU915_SB1)
          freq=$opt
          break
          ;;
@@ -35,6 +45,7 @@ else
    balena exec -it $containerID sh -c "cp /etc/helium_gateway/settings.toml /etc/helium_gateway/settings.toml.bck.$epoch" &>/dev/null
    balena exec -it $containerID sh -c "sed -i 's/^region = \"EU868\".*//i ' /etc/helium_gateway/settings.toml" &>/dev/null
    balena exec -it $containerID sh -c "sed -i 's/^region = \"US915\".*//i ' /etc/helium_gateway/settings.toml" &>/dev/null
+   balena exec -it $containerID sh -c "sed -i 's/^region = \"AU915_SB1\".*//i ' /etc/helium_gateway/settings.toml" &>/dev/null
    balena exec -it $containerID sh -c "sed -i '/^# region = \"US915\".*/a region = \"$opt\"' /etc/helium_gateway/settings.toml" &>/dev/null
    echo $'\n'Done. Reboot gateway to apply changes.
 fi
