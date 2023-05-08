@@ -6,7 +6,7 @@ This issue makes the packet forwarder to restart constantly, not allowing the ga
 
 This script sets the region on the gateway configuration, allowing the packet forwarder to work properly.
 
-Right now, only EU868 and US915 regions are supported. If the issue persists and new regions became available, they will be added.
+Right now, only EU868, US915 and AU915_SB1 regions are supported. If the issue persists and new regions became available, they will be added.
 
 Usage: ./crankk_nebra_rockPI_set_region.sh
 
